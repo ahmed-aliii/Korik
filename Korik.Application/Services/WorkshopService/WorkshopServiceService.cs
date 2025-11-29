@@ -12,9 +12,9 @@ namespace Korik.Application
     {
         #region Dependence Injection
 
-        private readonly IGenericRepository<WorkshopService> _repository;
+        private readonly IWorkshopServiceRepository _repository;
 
-        public WorkshopServiceService(IGenericRepository<WorkshopService> repository) : base(repository)
+        public WorkshopServiceService(IWorkshopServiceRepository repository) : base(repository)
         {
             _repository = repository;
         }
@@ -59,6 +59,31 @@ namespace Korik.Application
             catch (Exception ex)
             {
                 return ServiceResult<bool>.Fail($"Error checking origin uniqueness: {ex.Message}");
+            }
+        }
+
+        public async Task<ServiceResult<PagedResult<WorkshopService>>> SearchWorkshopsAsync(
+                    SearchWorkshopsByServiceAndOriginDTO searchDto)
+        {
+            try
+            {
+                var result = await _repository.SearchWorkshopsAsync(
+                    searchDto.ServiceId,
+                    searchDto.Origin,
+                    searchDto.City,
+                    searchDto.Latitude,
+                    searchDto.Longitude,
+                    searchDto.AppointmentDate,
+                    searchDto.PageNumber,
+                    searchDto.PageSize
+                );
+
+                return ServiceResult<PagedResult<WorkshopService>>.Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return ServiceResult<PagedResult<WorkshopService>>.Fail(
+                    $"Error searching workshops: {ex.Message}");
             }
         }
     }

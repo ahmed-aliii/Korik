@@ -12,7 +12,6 @@ namespace Korik.Application
 {
     public record CreateBookingRequest(CreateBookingDTO model) : IRequest<ServiceResult<BookingDTO>> { }
 
-
     public class CreateBookingRequestHandler : IRequestHandler<CreateBookingRequest, ServiceResult<BookingDTO>>
     {
         private readonly IBookingService _bookingService;
@@ -48,10 +47,13 @@ namespace Korik.Application
                 var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
                 return ServiceResult<BookingDTO>.Fail(string.Join(", ", errors));
             }
-            
 
             var bookingToCreate = _mapper.Map<Booking>(request.model);
-            var createdBooking = await _bookingService.CreateAsync(bookingToCreate);
+            var createdBooking = await _bookingService.CreateBookingWithPhotosAsync
+                (
+                bookingToCreate,
+                request.model.Photos
+                );
 
             if (!createdBooking.Success)
             {

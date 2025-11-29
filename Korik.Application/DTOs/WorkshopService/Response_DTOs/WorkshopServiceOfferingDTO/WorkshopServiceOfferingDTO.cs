@@ -36,5 +36,7 @@ namespace Korik.Application
         public string ServiceName { get; set; }
 
         public string ServiceDescription { get; set; }
+
+        public bool IsClosed { get; set; }
     }
 }
