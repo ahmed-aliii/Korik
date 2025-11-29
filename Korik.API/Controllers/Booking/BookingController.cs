@@ -11,27 +11,29 @@ namespace Korik.API.Controllers.Booking
     public class BookingController : ControllerBase
     {
         #region Dependency Injection
+
         private readonly IMediator _mediator;
+
         public BookingController(IMediator mediator)
         {
             _mediator = mediator;
         }
-        #endregion
 
+        #endregion Dependency Injection
 
         #region Commands
+
         [HttpPost]
         [SwaggerOperation(
             Summary = "Create a new booking",
             Description = "Creates a new booking with the provided details."
         )]
-        public async Task<IActionResult> PostBooking([FromBody] CreateBookingDTO model)
+        public async Task<IActionResult> PostBooking([FromForm] CreateBookingDTO model)
         {
             var result = await _mediator.Send(new CreateBookingRequest(model));
-           
+
             return ApiResponse.FromResult(this, result);
         }
-
 
         [HttpPut]
         [SwaggerOperation(
@@ -43,7 +45,6 @@ namespace Korik.API.Controllers.Booking
             var result = await _mediator.Send(new UpdateBookingRequest(model));
             return ApiResponse.FromResult(this, result);
         }
-
 
         [HttpDelete("{id:int}")]
         [SwaggerOperation(
@@ -58,10 +59,11 @@ namespace Korik.API.Controllers.Booking
                     ));
             return ApiResponse.FromResult(this, result);
         }
-        #endregion
 
+        #endregion Commands
 
         #region Queries
+
         [HttpGet("ByCar/{carId:int}")]
         [SwaggerOperation(
             Summary = "Get bookings by Car Id",
@@ -76,8 +78,6 @@ namespace Korik.API.Controllers.Booking
             return ApiResponse.FromResult(this, result);
         }
 
-
-
         [HttpGet("ByWorkshop/{workshopProfileId:int}")]
         [SwaggerOperation(
             Summary = "Get bookings by Workshop Id",
@@ -91,7 +91,7 @@ namespace Korik.API.Controllers.Booking
                     ));
             return ApiResponse.FromResult(this, result);
         }
-        #endregion
 
+        #endregion Queries
     }
 }

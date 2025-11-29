@@ -12,12 +12,12 @@ namespace Korik.Application
 {
     public record CreateBookingRequest(CreateBookingDTO model) : IRequest<ServiceResult<BookingDTO>> { }
 
-
     public class CreateBookingRequestHandler : IRequestHandler<CreateBookingRequest, ServiceResult<BookingDTO>>
     {
         private readonly IBookingService _bookingService;
         private readonly IValidator<CreateBookingDTO> _validator;
         private readonly IMapper _mapper;
+
         public CreateBookingRequestHandler
             (
             IBookingService bookingService,
@@ -29,6 +29,7 @@ namespace Korik.Application
             _validator = validator;
             _mapper = mapper;
         }
+
         public async Task<ServiceResult<BookingDTO>> Handle(CreateBookingRequest request, CancellationToken cancellationToken)
         {
             var validationResult = await _validator.ValidateAsync(request.model, cancellationToken);
@@ -37,10 +38,13 @@ namespace Korik.Application
                 var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
                 return ServiceResult<BookingDTO>.Fail(string.Join(", ", errors));
             }
-            
 
             var bookingToCreate = _mapper.Map<Booking>(request.model);
-            var createdBooking = await _bookingService.CreateAsync(bookingToCreate);
+            var createdBooking = await _bookingService.CreateBookingWithPhotosAsync
+                (
+                bookingToCreate,
+                request.model.Photos
+                );
 
             if (!createdBooking.Success)
             {

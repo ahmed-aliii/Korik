@@ -13,6 +13,12 @@ namespace Korik.Application
 
         public CarOrigin? Origin { get; set; }
 
+        public string? City { get; set; }
+
+        public decimal? Latitude { get; set; }
+        public decimal? Longitude { get; set; }
+        public DateTime AppointmentDate { get; set; }
+
         public int PageNumber { get; set; } = 1;
         public int PageSize { get; set; } = 10;
     }

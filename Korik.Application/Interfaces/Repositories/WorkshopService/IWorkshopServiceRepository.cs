@@ -9,5 +9,14 @@ namespace Korik.Application
 {
     public interface IWorkshopServiceRepository : IGenericRepository<WorkshopService>
     {
+        Task<PagedResult<WorkshopService>> SearchWorkshopsAsync(
+            int serviceId,
+            CarOrigin? origin,
+            string? city,
+            decimal? latitude,
+            decimal? longitude,
+            DateTime appointmentDate,
+            int pageNumber,
+            int pageSize);
     }
 }
