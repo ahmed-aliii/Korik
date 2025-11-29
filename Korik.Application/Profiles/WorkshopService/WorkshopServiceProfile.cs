@@ -40,6 +40,7 @@ namespace Korik.Application
                 .ForMember(dest => dest.Longitude, opt => opt.MapFrom(src => src.WorkShopProfile.Longitude))
                 .ForMember(dest => dest.NumbersOfTechnicians, opt => opt.MapFrom(src => src.WorkShopProfile.NumbersOfTechnicians))
                 // Service Offering Details (from WorkshopService entity itself)
+                .ForMember(dest => dest.WorkshopServiceID, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.Duration, opt => opt.MapFrom(src => src.Duration))
                 .ForMember(dest => dest.MinPrice, opt => opt.MapFrom(src => src.MinPrice))
                 .ForMember(dest => dest.MaxPrice, opt => opt.MapFrom(src => src.MaxPrice))
