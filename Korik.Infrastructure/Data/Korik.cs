@@ -29,6 +29,7 @@ namespace Korik.Infrastructure
         public virtual DbSet<CarOwnerProfile> CarOwnerProfiles { get; set; }
         public virtual DbSet<Review> Reviews { get; set; }
         public virtual DbSet<WorkshopService> WorkshopServices { get; set; }
+        public virtual DbSet<Notification> Notifications { get; set; }
 
         #region Booking
 

@@ -160,6 +160,7 @@ namespace Korik.Application
             services.AddScoped<IBookingPhotoService, BookingPhotoService>();
 
             #endregion BookingPhoto
+
             #region Review Service
             services.AddScoped<IReviewService, ReviewService>();
             #endregion

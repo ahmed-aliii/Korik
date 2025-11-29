@@ -148,12 +148,17 @@ namespace Korik.Infrastructure
             services.AddScoped<IBookingPhotoRepository, BookingPhotoRepository>();
 
             #endregion BokkingPhoto
+
             #region ReviewRepository
             services.AddScoped<IReviewRepository, ReviewRepository>();
             #endregion  
 
             #region Booking Repository
             services.AddScoped<IBookingRepository, BookingRepository>();
+            #endregion
+
+            #region Notification Service
+  services.AddScoped<INotificationService, SignalRNotificationService>();
             #endregion
 
             return services;
