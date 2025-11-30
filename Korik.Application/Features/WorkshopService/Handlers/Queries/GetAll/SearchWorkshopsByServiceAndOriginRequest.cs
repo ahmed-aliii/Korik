@@ -56,13 +56,9 @@ namespace Korik.Application
 
             #region Valid
 
-            var result = await _workshopServiceService.GetAllPagedAsync
+            var result = await _workshopServiceService.SearchWorkshopsAsync
                 (
-                request.Model.PageNumber,
-                request.Model.PageSize,
-                x => x.Origin == request.Model.Origin && x.ServiceId == request.Model.ServiceId,
-                x => x.WorkShopProfile,
-                x => x.Service
+                 request.Model
                 );
 
             //Not Valid
@@ -73,7 +69,11 @@ namespace Korik.Application
 
             //Valid
             //Map Entity(IEnumerable) => DTO (IEnumerable)
-            var pagedResult = _mapper.Map<PagedResult<WorkshopServiceOfferingDTO>>(result.Data);
+            var pagedResult = _mapper.Map<PagedResult<WorkshopServiceOfferingDTO>>(
+                result.Data,
+                    opt => opt.Items["AppointmentDate"] = request.Model.AppointmentDate
+
+                );
 
             return ServiceResult<PagedResult<WorkshopServiceOfferingDTO>>.Ok(pagedResult);
 

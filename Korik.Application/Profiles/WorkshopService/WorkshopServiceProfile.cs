@@ -40,13 +40,36 @@ namespace Korik.Application
                 .ForMember(dest => dest.Longitude, opt => opt.MapFrom(src => src.WorkShopProfile.Longitude))
                 .ForMember(dest => dest.NumbersOfTechnicians, opt => opt.MapFrom(src => src.WorkShopProfile.NumbersOfTechnicians))
                 // Service Offering Details (from WorkshopService entity itself)
+                .ForMember(dest => dest.WorkshopServiceID, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.Duration, opt => opt.MapFrom(src => src.Duration))
                 .ForMember(dest => dest.MinPrice, opt => opt.MapFrom(src => src.MinPrice))
                 .ForMember(dest => dest.MaxPrice, opt => opt.MapFrom(src => src.MaxPrice))
                 .ForMember(dest => dest.Origin, opt => opt.MapFrom(src => src.Origin))
                 // Service Details (from Service table)
                 .ForMember(dest => dest.ServiceName, opt => opt.MapFrom(src => src.Service.Name))
-                .ForMember(dest => dest.ServiceDescription, opt => opt.MapFrom(src => src.Service.Description));
+                .ForMember(dest => dest.ServiceDescription, opt => opt.MapFrom(src => src.Service.Description))
+                .ForMember(dest => dest.IsClosed, opt => opt.MapFrom((src, dest, destMember, context) =>
+                 {
+                     // Get appointment date from mapping context
+                     if (context.Items.TryGetValue("AppointmentDate", out var appointmentDateObj)
+                         && appointmentDateObj is DateTime appointmentDate)
+                     {
+                         var dayOfWeek = appointmentDate.DayOfWeek;
+                         var appointmentTime = TimeOnly.FromDateTime(appointmentDate);
+
+                         // Check if workshop is open at this time
+                         var isOpen = src.WorkShopProfile.WorkingHours.Any(wh =>
+                             wh.Day == dayOfWeek &&
+                             !wh.IsClosed &&
+                             wh.From <= appointmentTime &&
+                             wh.To >= appointmentTime
+                         );
+
+                         return !isOpen; // IsClosed = true if NOT open
+                     }
+
+                     return false; // Default to not closed if no date provided
+                 }));
 
             CreateMap<PagedResult<WorkshopService>, PagedResult<WorkshopServiceOfferingDTO>>()
                      .ForMember(dest => dest.Items, opt => opt.MapFrom(src => src.Items));

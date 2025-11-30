@@ -28,7 +28,9 @@ namespace Korik.Application
         // Service Offering Details (from WorkshopService junction table)
         public int Duration { get; set; }
 
+        public int WorkshopServiceID { get; set; }
         public decimal MinPrice { get; set; }
+
         public decimal MaxPrice { get; set; }
         public CarOrigin Origin { get; set; }
 
@@ -36,5 +38,7 @@ namespace Korik.Application
         public string ServiceName { get; set; }
 
         public string ServiceDescription { get; set; }
+
+        public bool IsClosed { get; set; }
     }
 }
