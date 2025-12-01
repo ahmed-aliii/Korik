@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Korik.Domain
 {
-  public enum NotificationType
+    public enum NotificationType
     {
         BookingCreated,
         BookingAccepted,

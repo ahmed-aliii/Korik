@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
+using System.Security.Claims;
 
 namespace Korik.API.Controllers.Booking
 {
@@ -43,6 +44,21 @@ namespace Korik.API.Controllers.Booking
         public async Task<IActionResult> PutBooking([FromBody] UpdateBookingDTO model)
         {
             var result = await _mediator.Send(new UpdateBookingRequest(model));
+            return ApiResponse.FromResult(this, result);
+        }
+
+        [HttpPut("Update-Booking-Status")]
+        [SwaggerOperation(
+            Summary = "Update an existing booking Status",
+            Description = "Updates the booking Statu of an existing booking."
+        )]
+        public async Task<IActionResult> UpdateBookingStatus([FromBody] UpdateBookingStatusDTO model)
+        {
+            // Get user ID from JWT token
+            var applicationUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            model.ApplicationUserId = applicationUserId;
+
+            var result = await _mediator.Send(new UpdateBookingStatusRequest(model));
             return ApiResponse.FromResult(this, result);
         }
 

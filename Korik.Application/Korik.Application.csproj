@@ -11,7 +11,6 @@
     <Folder Include="DTOs\CarIndicators\Request_DTOs\GetAllCarIndicatorDTO\" />
     <Folder Include="Features\Account\Handlers\Queries\" />
     <Folder Include="Features\Booking\Handlers\Command\Delete\" />
-    <Folder Include="Features\Booking\Handlers\Command\Update\" />
     <Folder Include="Features\Booking\Handlers\Queries\" />
     <Folder Include="Features\Service\Handlers\Commands\Create\" />
     <Folder Include="Features\Service\Handlers\Commands\Delete\" />

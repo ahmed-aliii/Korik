@@ -29,7 +29,7 @@ namespace Korik.Application
               .ForMember(dest => dest.CreatedAt,
                          opt => opt.MapFrom(src => DateTime.UtcNow));
 
-
+            CreateMap<UpdateBookingStatusDTO, Booking>();
 
             CreateMap<UpdateBookingDTO, Booking>();
 
