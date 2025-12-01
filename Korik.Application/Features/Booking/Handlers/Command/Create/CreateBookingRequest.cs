@@ -20,6 +20,9 @@ namespace Korik.Application
         private readonly IWorkShopProfileService _workShopProfileService;
         private readonly IValidator<CreateBookingDTO> _validator;
         private readonly IMapper _mapper;
+        private readonly INotificationService _notificationService;
+        private readonly IGenericRepository<Car> _carRepository;
+        private readonly IGenericRepository<WorkShopProfile> _workshopRepository;
 
         public CreateBookingRequestHandler
             (
@@ -28,7 +31,10 @@ namespace Korik.Application
             ICarService carService,
             IWorkShopProfileService workShopProfileService,
             IValidator<CreateBookingDTO> validator,
-            IMapper mapper
+            IMapper mapper,
+            INotificationService notificationService,
+            IGenericRepository<Car> carRepository,
+            IGenericRepository<WorkShopProfile> workshopRepository
             )
         {
             _bookingService = bookingService;
@@ -37,6 +43,9 @@ namespace Korik.Application
             _workShopProfileService = workShopProfileService;
             _validator = validator;
             _mapper = mapper;
+            _notificationService = notificationService;
+            _carRepository = carRepository;
+            _workshopRepository = workshopRepository;
         }
 
         public async Task<ServiceResult<BookingDTO>> Handle(CreateBookingRequest request, CancellationToken cancellationToken)
@@ -58,6 +67,29 @@ namespace Korik.Application
             if (!createdBooking.Success)
             {
                 return ServiceResult<BookingDTO>.Fail(createdBooking.Message ?? "Failed to create booking.");
+            }
+
+            // Get car owner ID from the car
+            var car = await _carRepository.GetByIdAsync(createdBooking.Data.CarId);
+            var workshop = await _workshopRepository.GetByIdAsync(createdBooking.Data.WorkShopProfileId);
+
+            if (car != null && workshop != null)
+            {
+                // Send notification to workshop
+                var notificationPayload = new
+                {
+                    BookingId = createdBooking.Data.Id,
+                    CarOwnerId = car.CarOwnerProfileId,
+                    AppointmentDate = createdBooking.Data.AppointmentDate,
+                    IssueDescription = createdBooking.Data.IssueDescription,
+                    WorkshopServiceId = createdBooking.Data.WorkshopServiceId,
+                    CarId = createdBooking.Data.CarId
+                };
+
+                await _notificationService.NotifyWorkshopBookingRequestAsync(
+                    createdBooking.Data.WorkShopProfileId,
+                    notificationPayload
+                );
             }
 
             var bookingDto = _mapper.Map<BookingDTO>(createdBooking.Data);

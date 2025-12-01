@@ -4,6 +4,7 @@ using Korik.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Korik.Infrastructure.Migrations
 {
     [DbContext(typeof(Korik))]
-    partial class KorikModelSnapshot : ModelSnapshot
+    [Migration("20251129182358_Add A signalR Notification sys")]
+    partial class AddAsignalRNotificationsys
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -418,50 +421,47 @@ namespace Korik.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("BookingId")
+                    b.Property<int>("CarOwnerId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETUTCDATE()");
-
-                    b.Property<bool>("IsRead")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Message")
                         .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
-                    b.Property<string>("ReceiverId")
-                        .IsRequired()
-                        .HasMaxLength(450)
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<DateTime?>("ReadAt")
+                        .HasColumnType("datetime2");
 
-                    b.Property<string>("SenderId")
-                        .IsRequired()
-                        .HasMaxLength(450)
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int?>("RelatedEntityId")
+                        .HasColumnType("int");
 
-                    b.Property<int>("Type")
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int>("WorkShopProfileId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BookingId");
+                    b.HasIndex("CarOwnerId");
 
                     b.HasIndex("CreatedAt");
 
-                    b.HasIndex("IsRead");
+                    b.HasIndex("Status");
 
-                    b.HasIndex("ReceiverId");
+                    b.HasIndex("WorkShopProfileId");
 
-                    b.HasIndex("SenderId");
-
-                    b.ToTable("Notifications", (string)null);
+                    b.ToTable("Notifications");
                 });
 
             modelBuilder.Entity("Korik.Domain.Review", b =>
@@ -975,28 +975,21 @@ namespace Korik.Infrastructure.Migrations
 
             modelBuilder.Entity("Korik.Domain.Notification", b =>
                 {
-                    b.HasOne("Korik.Domain.Booking", "Booking")
-                        .WithMany()
-                        .HasForeignKey("BookingId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.HasOne("Korik.Domain.ApplicationUser", "Receiver")
-                        .WithMany()
-                        .HasForeignKey("ReceiverId")
+                    b.HasOne("Korik.Domain.CarOwnerProfile", "CarOwner")
+                        .WithMany("Notifications")
+                        .HasForeignKey("CarOwnerId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Korik.Domain.ApplicationUser", "Sender")
-                        .WithMany()
-                        .HasForeignKey("SenderId")
+                    b.HasOne("Korik.Domain.WorkShopProfile", "WorkShopProfile")
+                        .WithMany("Notifications")
+                        .HasForeignKey("WorkShopProfileId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Booking");
+                    b.Navigation("CarOwner");
 
-                    b.Navigation("Receiver");
-
-                    b.Navigation("Sender");
+                    b.Navigation("WorkShopProfile");
                 });
 
             modelBuilder.Entity("Korik.Domain.Review", b =>

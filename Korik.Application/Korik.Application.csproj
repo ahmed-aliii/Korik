@@ -18,6 +18,7 @@
     <Folder Include="Features\Service\Handlers\Commands\Update\" />
     <Folder Include="Features\Service\Handlers\Queries\GetById\" />
     <Folder Include="Features\Service\Handlers\Queries\GetServicesBySubcategoryId\" />
+    <Folder Include="Services\Notification\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -29,6 +30,7 @@
     <PackageReference Include="Google.Apis.Auth" Version="1.72.0" />
     <PackageReference Include="MediatR" Version="13.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="6.0.0-preview.4.21253.5" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.2.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.10" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.10" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.10" />

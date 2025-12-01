@@ -29,7 +29,11 @@ namespace Korik.Application
             ICarService carService,
             IWorkShopProfileService workShopProfileService,
             IValidator<UpdateBookingDTO> validator,
-            IMapper mapper
+            IMapper mapper,
+            INotificationService notificationService,
+            IGenericRepository<Booking> bookingRepository,
+            IGenericRepository<Car> carRepository,
+            IGenericRepository<WorkShopProfile> workshopRepository
             )
         {
             _bookingService = bookingService;
@@ -38,6 +42,10 @@ namespace Korik.Application
             _workShopProfileService = workShopProfileService;
             _validator = validator;
             _mapper = mapper;
+            _notificationService = notificationService;
+            _bookingRepository = bookingRepository;
+            _carRepository = carRepository;
+            _workshopRepository = workshopRepository;
         }
 
         public async Task<ServiceResult<BookingDTO>> Handle(UpdateBookingRequest request, CancellationToken cancellationToken)

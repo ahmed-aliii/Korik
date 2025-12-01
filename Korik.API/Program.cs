@@ -1,6 +1,7 @@
 ﻿using Korik.Application;
 using Korik.Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
@@ -184,6 +185,12 @@ namespace Korik.API
             });
 
             #endregion CORS Policy
+
+            #region SignalR
+
+            builder.Services.AddSignalR();
+
+            #endregion SignalR
 
             #endregion Built-In Services: Already dclared -> Need To Register
 

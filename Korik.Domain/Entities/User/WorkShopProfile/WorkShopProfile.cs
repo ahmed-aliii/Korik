@@ -78,5 +78,11 @@ namespace Korik.Domain
         #region WorkShopProfile 1---M Review
         public virtual ICollection<Review> Reviews { get; set; } = new List<Review>();
         #endregion
+
+        #region WorkShopProfile 1---M Notification
+
+        public virtual ICollection<Notification> Notifications { get; set; } = new List<Notification>();
+
+        #endregion
     }
 }
