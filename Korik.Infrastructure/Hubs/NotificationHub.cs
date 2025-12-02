@@ -17,7 +17,7 @@ namespace Korik.Infrastructure
 
       public NotificationHub(IUserConnectionManager connectionManager)
         {
-      _connectionManager = connectionManager;
+            _connectionManager = connectionManager;
         }
 
         public override async Task OnConnectedAsync()
