@@ -79,7 +79,6 @@ namespace Korik.API.Controllers
         }
         #endregion
 
-
         #region Queries
         [HttpGet("{id:int}")]
         [SwaggerOperation(Summary = "Get a car by Id")]

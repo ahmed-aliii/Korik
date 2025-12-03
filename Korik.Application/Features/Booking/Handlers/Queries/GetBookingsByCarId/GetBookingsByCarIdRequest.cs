@@ -12,7 +12,6 @@ namespace Korik.Application
     public record GetBookingsByCarIdRequest(GetBookingsByCarIdDTO model) : IRequest<ServiceResult<PagedResult<BookingDTO>>>{ }
 
 
-
     public class GetBookingsByCarIdRequestHandler : IRequestHandler<GetBookingsByCarIdRequest, ServiceResult<PagedResult<BookingDTO>>>
     {
         private readonly IBookingService _bookingService;
@@ -59,5 +58,4 @@ namespace Korik.Application
 
         }
     }
-
 }
