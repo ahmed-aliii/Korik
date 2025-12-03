@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using FluentValidation;
+using Korik.Domain;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -42,7 +43,8 @@ namespace Korik.Application
                (
               request.model.PageNumber,
                request.model.PageSize,
-                  x => x.CarId == request.model.CarId
+                  x => x.CarId == request.model.CarId && (x.Status == BookingStatus.Pending || x.Status == BookingStatus.Confirmed)
+                  
                );
 
             //Not Valid
